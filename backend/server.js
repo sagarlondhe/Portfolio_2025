@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -27,6 +28,14 @@ app.use('/api/contact', require('./routes/contact'));
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Server is running', timestamp: new Date() });
+});
+
+// Serve static files from frontend build
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+// Fallback to index.html for client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
 });
 
 const PORT = process.env.PORT || 5000;

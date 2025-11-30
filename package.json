@@ -1,0 +1,25 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "description": "Portfolio Website - MERN Stack",
+  "main": "backend/server.js",
+  "scripts": {
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "start": "cd backend && node server.js",
+    "dev": "cd backend && nodemon server.js",
+    "build": "cd frontend && npm run build"
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "keywords": [
+    "portfolio",
+    "mern",
+    "react",
+    "node",
+    "express",
+    "mongodb"
+  ],
+  "author": "Sagar Londhe",
+  "license": "ISC"
+}
