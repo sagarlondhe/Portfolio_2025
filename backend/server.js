@@ -30,13 +30,25 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'Server is running', timestamp: new Date() });
 });
 
-// Serve static files from frontend build
-app.use(express.static(path.join(__dirname, '../frontend/build')));
+const fs = require('fs');
 
-// Fallback to index.html for client-side routing
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/build/index.html'));
-});
+// Serve static files from frontend build if it exists
+const buildPath = path.join(__dirname, '../frontend/build');
+if (fs.existsSync(buildPath)) {
+  app.use(express.static(buildPath));
+
+  // Fallback to index.html for client-side routing
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(buildPath, 'index.html'));
+  });
+} else {
+  console.warn(`Frontend build not found at ${buildPath}. Skipping static file serving.`);
+
+  // If frontend isn't built, keep API routes and return a helpful message for unknown routes
+  app.get('*', (req, res) => {
+    res.status(404).json({ error: 'Frontend not built. Serve the React app or set up a static host.' });
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 
